@@ -79,24 +79,24 @@ $(function() {
 
     /* New Feed Selection testing */
     describe('New Feed Selection', function() {
-        // Declare feed1 to hold first feed entries
-        const feed1 = [];
+        // Declare feeds for comparison
+        let feed1, feed2;
 
         // Run beforeEach to get two sets of feeds from loadFeed
         // for comparison in test below
         beforeEach(function(done) {
-            loadFeed(0);
-            Array.from(feed.children).forEach(function(entry) {
-                feed1.push(entry.innerText);
+            loadFeed(0, function() {
+                feed1 = document.querySelector('div.feed').innerHTML;
+                loadFeed(1, function() {
+                    feed2 = document.querySelector('div.feed').innerHTML;
+                    done();
+                });
             });
-            loadFeed(1,done);
         });
         /* Ensure new feeds produce new content
          */
         it('content changes with each new feed', function() {
-            Array.from(feed.children).forEach(function(entry, index) {
-               expect(entry.innerText === feed1[index]).toBe(false); 
-            });
+            expect(feed1).not.toBe(feed2);
         });
     });
     });
